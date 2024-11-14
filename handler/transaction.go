@@ -28,9 +28,9 @@ func (a *newTransactionImplement) NewTransaction(c *gin.Context) {
 	var data struct {
 		AccountID             int64  `json:"account_id"`
 		TransactionCategoryID *int64 `json:"transaction_category_id"`
-		FromAccountID         *int64 `json:"from_account_id"`
-		ToAccountID           *int64 `json:"to_account_id"`
-		Amount                int64  `json:"amount"`
+		// FromAccountID         *int64 `json:"from_account_id"`
+		// ToAccountID           *int64 `json:"to_account_id"`
+		Amount int64 `json:"amount"`
 	}
 
 	// Bind JSON to data struct
@@ -43,9 +43,9 @@ func (a *newTransactionImplement) NewTransaction(c *gin.Context) {
 	transaction := model.Transaction{
 		AccountID:             data.AccountID,
 		TransactionCategoryID: data.TransactionCategoryID,
-		FromAccountID:         data.FromAccountID,
-		ToAccountID:           data.ToAccountID,
-		Amount:                data.Amount,
+		// FromAccountID:         data.FromAccountID,
+		// ToAccountID:           data.ToAccountID,
+		Amount: data.Amount,
 	}
 
 	// Save transaction to the database

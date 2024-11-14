@@ -303,9 +303,9 @@ func (a *accountImplement) Transfer(c *gin.Context) {
 
 	// Create transaction record
 	transaction := model.Transaction{
-		AccountID:       AccountID,
-		FromAccountID:   &AccountID,
-		ToAccountID:     &payload.ToAccountID,
+		AccountID: AccountID,
+		// FromAccountID:   &AccountID,
+		// ToAccountID:     &payload.ToAccountID,
 		Amount:          payload.Amount,
 		TransactionDate: time.Now(),
 	}

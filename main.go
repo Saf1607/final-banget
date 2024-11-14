@@ -81,6 +81,12 @@ func main() {
 	transactionRoutes.POST("/new", transactionHandler.NewTransaction)
 	transactionRoutes.GET("/list", transactionHandler.TransactionList)
 
+	r.GET("/api/billers", handler.GetBillerData)
+	r.GET("/api/billers/data", handler.GetBiller)
+	r.POST("/api/billers/pay", func(c *gin.Context) {
+		handler.PayBillerAccount(c, db) // Pastikan db diteruskan dengan benar
+	})
+
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
