@@ -11,7 +11,6 @@ type Transaction struct {
 	Amount          int64     `json:"amount" gorm:"not null"`
 	TransactionDate time.Time `json:"transaction_date"   gorm:"default:CURRENT_TIMESTAMP"`
 	BillerAccountID string    `json:"biller_account_id"`
-	Name            string    `json:"name"`
 }
 
 func (Transaction) TableName() string {

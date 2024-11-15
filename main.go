@@ -53,12 +53,12 @@ func main() {
 	accountRoutes := r.Group("/account")
 	accountRoutes.POST("/create", accountHandler.Create)
 	accountRoutes.GET("/read/:id", accountHandler.Read)
-	accountRoutes.PATCH("/update/:id", accountHandler.Update)
 	accountRoutes.DELETE("/delete/:id", accountHandler.Delete)
 	accountRoutes.GET("/list", accountHandler.List)
 	accountRoutes.POST("/topup", accountHandler.TopUp)
 
 	// middleware := middleware.AuthMiddleware(signingKey)
+	accountRoutes.PATCH("/update", middleware.AuthMiddleware(signingKey), accountHandler.Update)
 	accountRoutes.GET("/my", middleware.AuthMiddleware(signingKey), accountHandler.My)
 	accountRoutes.GET("/balance", middleware.AuthMiddleware(signingKey), accountHandler.Balance)
 	accountRoutes.POST("/transfer", middleware.AuthMiddleware(signingKey), accountHandler.Transfer)
@@ -87,6 +87,7 @@ func main() {
 		handler.PayBillerAccount(c, db) // Pastikan db diteruskan dengan benar
 	})
 
+	r.GET("/api/biller/:biller_id/account/:account_id", handler.GetBillerAccount)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 

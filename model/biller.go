@@ -19,10 +19,18 @@ type PayBillerRequest struct {
 	BillerID        string `json:"biller_id"`
 	BillerAccountID string `json:"biller_account_id"`
 	Amount          int64  `json:"amount"`
-	Name            string `json:"name"`
 }
 
-// Struktur untuk response list biller dari API eksternal
-// type ListBillerResponse struct {
-// 	Data []Biller `json:"data"`
-// }
+type BillerAccountData struct {
+	BillerID        string `json:"biller_id"`
+	BillerName      string `json:"biller_name"`
+	BillerAccountID string `json:"biller_account_id"`
+	Name            string `json:"name"`
+	BillAmount      int    `json:"bill_amount"`
+	Paid            bool   `json:"paid"`
+}
+
+type BillerAccountResponse struct {
+	Message string            `json:"message"`
+	Data    BillerAccountData `json:"data"`
+}

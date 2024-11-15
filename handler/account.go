@@ -93,37 +93,47 @@ func (a *accountImplement) Read(c *gin.Context) {
 func (a *accountImplement) Update(c *gin.Context) {
 	payload := model.Account{}
 
-	// bind JSON Request to payload
-	err := c.BindJSON(&payload)
-	if err != nil {
+	// Bind JSON Request to payload
+	if err := c.BindJSON(&payload); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error": err,
+			"error": err.Error(),
 		})
 		return
 	}
 
-	// get id from url account/update/5, 5 will be the id
-	id := c.Param("id")
+	// Get account_id from token claims (set by the middleware)
+	accountID, exists := c.Get("account_id")
+	if !exists {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"error": "Account ID not found in token",
+		})
+		return
+	}
 
-	// Find first data based on id and put to account model
+	// Find the account by ID
 	account := model.Account{}
-	result := a.db.First(&account, "account_id = ?", id)
+	result := a.db.First(&account, accountID)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
-				"error": "Not found",
+				"error": "Account not found",
 			})
 			return
 		}
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"error": result.Error.Error(),
 		})
 		return
 	}
 
-	// Update data
+	// Update the account's name
 	account.Name = payload.Name
-	a.db.Save(account)
+	if err := a.db.Save(&account).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to update account",
+		})
+		return
+	}
 
 	// Success response
 	c.JSON(http.StatusOK, gin.H{
